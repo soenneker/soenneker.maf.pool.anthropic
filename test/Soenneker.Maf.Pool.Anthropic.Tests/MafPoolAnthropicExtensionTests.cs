@@ -1,14 +1,13 @@
-using Xunit;
 
 namespace Soenneker.Maf.Pool.Anthropic.Tests;
 
 public sealed class MafPoolAnthropicExtensionTests
 {
-    public MafPoolAnthropicExtensionTests(ITestOutputHelper output)
+    public MafPoolAnthropicExtensionTests( output)
     {
     }
 
-    [Fact]
+    [Test]
     public void Default()
     {
 
