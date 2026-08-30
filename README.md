@@ -13,16 +13,26 @@ Provides Anthropic-specific registration extensions for `IMafPool`, enabling int
 dotnet add package Soenneker.Maf.Pool.Anthropic
 ```
 
-## Quick start
+## Usage
 
 ```csharp
 using Soenneker.Maf.Pool.Anthropic;
+using Soenneker.Maf.Pool.Abstract;
 
-IMafPool pool = /* obtain from your application */;
-await pool.AddAnthropic("value", "value", "value", "value", default);
+await pool.AddAnthropic(
+    poolId: "chat",
+    key: "claude-primary",
+    modelId: "claude-sonnet-4-5",
+    apiKey: configuration["ANTHROPIC_API_KEY"]!,
+    rpm: 60,
+    instructions: "Answer concisely.",
+    cancellationToken: cancellationToken);
+
+(AIAgent? agent, IMafPoolEntry? entry) =
+    await pool.GetAvailable("chat", cancellationToken);
 ```
 
-Registers an Anthropic model in the agent pool with optional rate/token limits.
+`pool` is an `IMafPool` registered by `Soenneker.Maf.Pool`. The agent is created lazily on its first successful checkout and then reused for the entry.
 
 ## What you get
 
@@ -37,4 +47,7 @@ Registers an Anthropic model in the agent pool with optional rate/token limits.
 
 ## Practical notes
 
-- Cancellation stops pending work; it does not undo work that has already completed.
+- Store the API key in a secret provider; the pool retains it in the entry options while the entry is registered.
+- Omitted instructions default to `You are a helpful assistant.`
+- Checkout consumes one request from the configured quota. `tokensPerDay` is also charged once per checkout; this adapter does not reconcile actual provider token usage.
+- Call `RemoveAnthropic()` to unregister the entry and evict its cached agent.
