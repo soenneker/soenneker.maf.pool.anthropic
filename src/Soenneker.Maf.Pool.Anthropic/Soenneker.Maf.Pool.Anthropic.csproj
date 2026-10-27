@@ -47,6 +47,6 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.Agents.AI.Anthropic" Version="1.26.0" />
-        <PackageReference Include="Soenneker.Maf.Pool" Version="11.0.190" />
+        <PackageReference Include="Soenneker.Maf.Pool" Version="11.0.192" />
     </ItemGroup>
 </Project>
